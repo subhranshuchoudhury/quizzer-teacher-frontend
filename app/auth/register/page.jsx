@@ -18,7 +18,7 @@ export default function Login(props) {
 
   const loginEvent = async (e) => {
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/api/auth/register", {
         cache: "no-cache",
         method: "POST",
         headers: {
@@ -27,12 +27,18 @@ export default function Login(props) {
         body: JSON.stringify(InputForm),
       });
 
+      const data = await res.json();
       if (res.status === 200) {
-        router.push("/");
+        alert(data?.message);
+      } else if (res.status === 301) {
+        // const encryptedEmail = cryptr.encrypt(InputForm?.email);
+        router.push(`/auth/register/verify/${InputForm?.email}`);
+        console.log(data);
+      } else {
+        alert(data?.message);
       }
-      console.log(data);
     } catch (error) {
-      console.log("ERROR", error);
+      alert("Server failure");
     }
   };
   return (
@@ -62,6 +68,58 @@ export default function Login(props) {
           name="password"
           onChange={handleChange}
           value={InputForm.password || ""}
+        />
+
+        <label className="label">
+          <span className="label-text">Name</span>
+          <span className="label-text-alt">name</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Type here"
+          className="input input-bordered w-full max-w-xs"
+          name="name"
+          onChange={handleChange}
+          value={InputForm.name || ""}
+        />
+
+        <label className="label">
+          <span className="label-text">Subject</span>
+          <span className="label-text-alt">subject</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Type here"
+          className="input input-bordered w-full max-w-xs"
+          name="subject"
+          onChange={handleChange}
+          value={InputForm.subject || ""}
+        />
+
+        <label className="label">
+          <span className="label-text">Registration</span>
+          <span className="label-text-alt">Registration</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Type here"
+          className="input input-bordered w-full max-w-xs"
+          name="regdNo"
+          onChange={handleChange}
+          value={InputForm.regdNo || ""}
+        />
+
+        <label className="label">
+          <span className="label-text">Phone</span>
+          <span className="label-text-alt">Phone</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Type here"
+          className="input input-bordered w-full max-w-xs"
+          name="phone"
+          onChange={handleChange}
+          value={InputForm.phone || ""}
         />
       </div>
       <button
