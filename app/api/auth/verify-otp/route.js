@@ -16,7 +16,7 @@ export const POST = async (req) => {
 
   console.log(requestBody);
 
-  let response = await fetch("http://localhost:5000/api/teacher/auth/verify", {
+  let response = await fetch("http://194.195.118.134/api/teacher/auth/verify", {
     method: "POST",
     body: bodyContent,
     headers: headersList,

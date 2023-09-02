@@ -15,11 +15,11 @@ export const POST = async (req) => {
     name: data?.name,
     subject: data?.subject,
     primaryPhone: data?.phone,
-    regdNo: data?.regdNo,
+    regdNo: data?.registration,
   });
 
   const response = await fetch(
-    "http://localhost:5000/api/teacher/auth/register",
+    "http://194.195.118.134/api/teacher/auth/register",
     {
       method: "POST",
       body: bodyContent,

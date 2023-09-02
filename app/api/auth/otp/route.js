@@ -16,7 +16,7 @@ export const POST = async (req) => {
   });
 
   let response = await fetch(
-    "http://localhost:5000/api/teacher/auth/send-otp",
+    "http://194.195.118.134/api/teacher/auth/send-otp",
     {
       method: "POST",
       body: bodyContent,

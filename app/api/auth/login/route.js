@@ -14,11 +14,14 @@ export const POST = async (req) => {
     password: data?.password,
   });
 
-  const response = await fetch("http://localhost:5000/api/teacher/auth/login", {
-    method: "POST",
-    body: bodyContent,
-    headers: headersList,
-  });
+  const response = await fetch(
+    "http://194.195.118.134/api/teacher/auth/login",
+    {
+      method: "POST",
+      body: bodyContent,
+      headers: headersList,
+    }
+  );
 
   let dataResponse = await response.json();
   console.log("dataResponse", dataResponse);
