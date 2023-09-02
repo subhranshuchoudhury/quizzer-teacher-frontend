@@ -24,7 +24,6 @@ export const POST = async (req) => {
   );
 
   let dataResponse = await response.json();
-  console.log("dataResponse", dataResponse);
 
   if (dataResponse?.accessToken) {
     cookies().set("x-access-token", `${dataResponse?.accessToken}`, {

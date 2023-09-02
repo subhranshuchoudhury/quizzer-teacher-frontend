@@ -5,7 +5,6 @@ export const POST = async (req) => {
 
   let headersList = {
     Accept: "*/*",
-    "User-Agent": "Thunder Client (https://www.thunderclient.com)",
     "Content-Type": "application/json",
   };
 
@@ -14,8 +13,6 @@ export const POST = async (req) => {
     otp: requestBody?.otp,
   });
 
-  console.log(requestBody);
-
   let response = await fetch("http://194.195.118.134/api/teacher/auth/verify", {
     method: "POST",
     body: bodyContent,
@@ -23,7 +20,6 @@ export const POST = async (req) => {
   });
 
   let data = await response.json();
-  console.log(data);
 
   return NextResponse.json(data, { status: response.status });
 };

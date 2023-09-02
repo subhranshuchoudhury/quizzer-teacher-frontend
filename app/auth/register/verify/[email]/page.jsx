@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { toast } from "react-hot-toast";
 import { BiArrowBack } from "react-icons/bi";
 import { ImSpinner } from "react-icons/im";
 
@@ -13,15 +14,18 @@ export default function page(props) {
   const [timer, setTimer] = useState(0);
   const [otp, setOTP] = useState("");
   const [Loading, setLoading] = useState(false);
-  const [timing, setTiming] = useState(false);
-
+  const [timingBool, setTimingBool] = useState(true);
+  const [showCountDown, setShowCountDown] = useState(false);
+  const [isSendingMail, setisSendingMail] = useState(true);
   useEffect(() => {
-    try {
-      setEmail(decodeURIComponent(props.params.email));
-      sendOTP(decodeURIComponent(props.params.email));
-    } catch (error) {
-      alert("Invalid Link");
+    if (decodeURIComponent(props.params.email) == "undefined") {
+      toast.error("Invalid email");
+      router.replace("/");
+      return;
     }
+
+    setEmail(decodeURIComponent(props.params.email));
+    sendOTP(decodeURIComponent(props.params.email));
   }, []);
 
   const verifyOTP = async () => {
@@ -42,20 +46,23 @@ export default function page(props) {
       const data = await response.json();
 
       if (response.status === 200) {
-        alert(data?.message);
+        toast.success(data?.message);
         router.replace("/auth/login");
       } else {
-        alert(data?.message);
+        toast.error(data?.message);
+        if (data?.message === "Teacher already verified") {
+          router.replace("/auth/login");
+        }
       }
-      console.log(data);
     } catch (error) {
-      console.log(error);
-      alert("server error");
+      toast.error("Server failure");
     }
     setLoading(false);
   };
 
   const sendOTP = async (email) => {
+    setisSendingMail(true);
+    setShowCountDown(false);
     try {
       const res = await fetch("/api/auth/otp", {
         cache: "no-cache",
@@ -69,14 +76,17 @@ export default function page(props) {
       const data = await res.json();
       if (res.status === 200) {
         setTimer(300);
-        // alert(data?.message);
+        toast.success(data?.message);
       } else {
-        // alert(data?.message);
         setTimer(300 - Number(data?.duration) * 60);
-        console.log(data);
+        toast.success(data?.message);
+        console.log(data?.message);
       }
+      setShowCountDown(true);
+      setisSendingMail(false);
     } catch (error) {
-      console.log("ERROR");
+      toast.error("Server failure");
+      setShowCountDown(false);
     }
   };
 
@@ -91,21 +101,24 @@ export default function page(props) {
         </Link>
       </div>
       <div className="fixed top-0 right-0 p-10">
-        <CountdownCircleTimer
-          size={50}
-          isPlaying
-          duration={timer}
-          colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-          colorsTime={[7, 5, 2, 0]}
-          strokeWidth={4}
-        >
-          {({ remainingTime }) => {
-            if (remainingTime == 0) {
-              setTiming(true);
-            }
-            return remainingTime;
-          }}
-        </CountdownCircleTimer>
+        {showCountDown && (
+          <CountdownCircleTimer
+            size={50}
+            isPlaying
+            duration={timer}
+            onComplete={() => {
+              setTimingBool(false);
+              setShowCountDown(false);
+            }}
+            colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
+            colorsTime={[7, 5, 2, 0]}
+            strokeWidth={4}
+          >
+            {({ remainingTime }) => {
+              return remainingTime;
+            }}
+          </CountdownCircleTimer>
+        )}
       </div>
       <form className="form-control p-5 shadow-md shadow-[#000000] bg-[#0c1a26] md:w-[400px] w-[90%] rounded-xl">
         <div className="flex items-center space-x-2 pb-7">
@@ -149,12 +162,32 @@ export default function page(props) {
                 </span>
               ) : (
                 <button
+                  hidden={!showCountDown}
                   onClick={verifyOTP}
                   className="bg-[#115791] w-full p-3 rounded-md hover:text-white hover:bg-[#39a6ff] transition-all ease-linear duration-300"
                 >
                   Verify Email
                 </button>
               )}
+
+              {!showCountDown ? (
+                <span
+                  onClick={() => {
+                    if (!isSendingMail) sendOTP(email);
+                  }}
+                  className={`bg-[#115791] w-full p-3 cursor-pointer inline-block rounded-md hover:text-white hover:bg-[#39a6ff] transition-all ease-linear text-center  duration-300 ${
+                    timingBool ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
+                  {isSendingMail ? (
+                    <span>
+                      Sending OTP <ImSpinner className="animate-spin inline" />
+                    </span>
+                  ) : (
+                    "Resend OTP"
+                  )}
+                </span>
+              ) : null}
             </div>
           </div>
         </div>

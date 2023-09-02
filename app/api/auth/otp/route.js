@@ -7,7 +7,6 @@ export const POST = async (req) => {
 
   let headersList = {
     Accept: "*/*",
-    "User-Agent": "Thunder Client (https://www.thunderclient.com)",
     "Content-Type": "application/json",
   };
 

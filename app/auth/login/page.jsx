@@ -5,12 +5,9 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { BiArrowBack } from "react-icons/bi";
 import { ImSpinner } from "react-icons/im";
-// import { useCookie } from "next-cookie";
 
 export default function Login(props) {
   const router = useRouter();
-  // const cookie = useCookie(props.cookie);
-  // console.log("cookie", cookie.get("name"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [Loading, setLoading] = useState(false);
@@ -30,19 +27,47 @@ export default function Login(props) {
         }),
       });
       if (res.status === 200) {
-        router.push("/");
-        toast.success("Successfully logged In");
+        router.replace("/home");
+        toast.success("Login Success");
+      } else {
+        toast.error("Invalid Credentials");
       }
     } catch (error) {
-      console.log("ERROR", error);
+      toast.error("Something Went Wrong");
     }
     setLoading(false);
+  };
+
+  const triggerToast = (message) => {
+    toast(`${message}`, {
+      duration: 4000,
+      position: "top-center",
+
+      // Styling
+      style: {},
+      className: "",
+
+      // Custom Icon
+      icon: "👏",
+
+      // Change colors of success/error/loading icon
+      iconTheme: {
+        primary: "#000",
+        secondary: "#fff",
+      },
+
+      // Aria
+      ariaProps: {
+        role: "status",
+        "aria-live": "polite",
+      },
+    });
   };
   return (
     <div className="w-full h-screen flex items-center justify-center relative">
       <div className="fixed top-0 left-0 p-10">
         <Link href={"/"}>
-          <button className="flex items-center space-x-2">
+          <button className="flex items-center space-x-2 text-base-200">
             <BiArrowBack />
             <span>Home</span>
           </button>
@@ -67,7 +92,7 @@ export default function Login(props) {
               value={email}
               required
               type="email"
-              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none"
+              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-white"
               name="from_name"
             />
             <label
@@ -90,7 +115,7 @@ export default function Login(props) {
               autoComplete="new-password"
               required
               type="password"
-              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none"
+              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-base-200"
               name="from_name"
             />
             <label
@@ -118,7 +143,7 @@ export default function Login(props) {
               </button>
             )}
           </div>
-          <div className="text-center">
+          <div className="text-center text-base-200">
             Don't Have An Account?{" "}
             <Link href={"/auth/register"}>
               <span className="text-[#fff] inline underline"> Create Now</span>

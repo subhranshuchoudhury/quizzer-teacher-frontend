@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 
 export const POST = async (req) => {
   const data = await req.json();
   const headersList = {
     Accept: "*/*",
-    "User-Agent": "Thunder Client (https://www.thunderclient.com)",
     "Content-Type": "application/json",
   };
 
@@ -27,8 +25,7 @@ export const POST = async (req) => {
     }
   );
 
-  const dataD = await response.json();
-  console.log(dataD);
+  const parsedResponse = await response.json();
 
-  return NextResponse.json(dataD, { status: response.status });
+  return NextResponse.json(parsedResponse, { status: response.status });
 };

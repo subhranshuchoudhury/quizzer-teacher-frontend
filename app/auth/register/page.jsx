@@ -36,16 +36,16 @@ export default function Login(props) {
 
       const data = await res.json();
       if (res.status === 200) {
-        alert(data?.message);
-      } else if (res.status === 301) {
-        // const encryptedEmail = cryptr.encrypt(InputForm?.email);
+        toast.success(data?.message);
         router.push(`/auth/register/verify/${email}`);
-        console.log(data);
+      } else if (res.status === 301) {
+        toast.success(data?.message);
+        router.push(`/auth/register/verify/${email}`);
       } else {
-        alert(data?.message);
+        toast.error(data?.message);
       }
     } catch (error) {
-      alert("Server failure");
+      toast.error("Server failure");
     }
   };
   return (
@@ -66,7 +66,7 @@ export default function Login(props) {
         </div>
         <p className="text-center ">hi there,</p>
         <p className="text-center text-white uppercase text-3xl font-[700]">
-          Regster Here
+          CREATE ACCOUNT
         </p>
         <div className="py-5 space-y-4">
           <div className="relative w-full flex flex-col justify-center">
@@ -77,7 +77,7 @@ export default function Login(props) {
               value={email}
               required
               type="email"
-              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none"
+              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-white"
               name="from_name"
             />
             <label
@@ -100,7 +100,7 @@ export default function Login(props) {
               autoComplete="new-password"
               required
               type="password"
-              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none"
+              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-white"
               name="from_name"
             />
             <label
@@ -122,7 +122,7 @@ export default function Login(props) {
               value={name}
               required
               type="text"
-              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none"
+              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-white"
               name="from_name"
             />
             <label
@@ -144,7 +144,7 @@ export default function Login(props) {
               value={registration}
               required
               type="text"
-              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none"
+              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-white"
               name="registration"
             />
             <label
@@ -166,14 +166,14 @@ export default function Login(props) {
               value={subject}
               required
               type="text"
-              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none"
+              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-white"
               name="subject"
             />
             <label
               htmlFor="subject"
               className={`absolute ${
-                registration?.trim()?.length > 0
-                  ? "translate-y-[-22.5px] text-white "
+                subject?.trim()?.length > 0
+                  ? "translate-y-[-22.5px] text-white"
                   : "  "
               } peer-focus:translate-y-[-22.5px] peer-focus:text-white md:text-base text-sm left-4 transition-transform pointer-events-none bg-[#0c1a26]`}
             >
@@ -188,14 +188,14 @@ export default function Login(props) {
               value={phone}
               required
               type="text"
-              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none"
+              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-white"
               name="phone"
             />
             <label
               htmlFor="phone"
               className={`absolute ${
-                registration?.trim()?.length > 0
-                  ? "translate-y-[-22.5px] text-white "
+                phone?.trim()?.length > 0
+                  ? "translate-y-[-22.5px] text-white"
                   : "  "
               } peer-focus:translate-y-[-22.5px] peer-focus:text-white md:text-base text-sm left-4 transition-transform pointer-events-none bg-[#0c1a26]`}
             >
