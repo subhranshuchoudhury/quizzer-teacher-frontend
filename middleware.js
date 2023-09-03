@@ -7,9 +7,11 @@ export function middleware(request) {
   if (!accessToken) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
+
+  console.log("middleware token", accessToken);
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: "/home",
+  matcher: ["/home", "/create-quiz"],
 };

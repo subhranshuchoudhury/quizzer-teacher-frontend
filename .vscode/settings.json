@@ -3,8 +3,11 @@
         "Cryptr",
         "daisyui",
         "Demail",
+        "officedocument",
+        "openxmlformats",
         "regd",
         "setis",
-        "setshow"
+        "setshow",
+        "spreadsheetml"
     ]
 }
