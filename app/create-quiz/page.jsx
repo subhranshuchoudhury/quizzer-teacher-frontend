@@ -3,10 +3,27 @@
 import { useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import * as XLSX from "xlsx";
+import Select from "react-select";
+import sections from "@/constants/sections";
+import batches from "@/constants/batches";
 
 export default function page() {
   const [excelData, setExcelData] = useState(null);
   const inputFileRef = useRef(null);
+  const [formData, setFormData] = useState({
+    name: null,
+    start_time: null,
+    end_time: null,
+    duration: null,
+    questions: null,
+    allowedSections: null, // * ["45"]
+    marksPerQuestion: 1, // * number
+    published: true,
+  });
+
+  const handleFormChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   const acceptFileTypes = [
     "application/vnd.ms-excel",
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -143,6 +160,75 @@ export default function page() {
 
         <div>
           <p>VIEW FILE SECTION</p>
+          {excelData && (
+            <div className="bg-red-500 p-5">
+              <label htmlFor="">QUIZ NAME: </label>
+              <input
+                placeholder="Quiz Name"
+                name="name"
+                onChange={handleFormChange}
+                type="text"
+                value={formData.name || ""}
+              />
+
+              <label htmlFor="">Marks per Question</label>
+
+              <input
+                type="number"
+                name="marksPerQuestion"
+                placeholder="Marks per Question"
+                value={formData?.marksPerQuestion || ""}
+                onChange={handleFormChange}
+                onWheel={(e) => e.target.blur()}
+              />
+
+              <label htmlFor="">Allow Sections</label>
+              <Select
+                defaultValue={[sections[0]]}
+                isMulti
+                name="allowedSections"
+                options={sections}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                value={formData?.allowedSections || []}
+                onChange={(e) => {
+                  if (
+                    e?.length > 0 &&
+                    e?.length !== 1 &&
+                    e[e?.length - 1]?.value === "ALLOW ALL"
+                  ) {
+                    toast.error("Remove all sections to select allow all");
+                    return;
+                  } else if (
+                    e?.length === 2 &&
+                    formData?.allowedSections?.length === 1 &&
+                    formData?.allowedSections[0]?.value === "ALLOW ALL"
+                  ) {
+                    toast.error("Remove allow all to select sections");
+                    return;
+                  }
+
+                  handleFormChange({
+                    target: {
+                      name: "allowedSections",
+                      value: e,
+                    },
+                  });
+                }}
+              />
+
+              <label htmlFor="">Select Batch</label>
+              <Select
+                className="basic-single"
+                classNamePrefix="select"
+                name="color"
+                options={batches}
+                onChange={(e) => {
+                  console.log(e);
+                }}
+              />
+            </div>
+          )}
           {excelData &&
             excelData.map((item, index) => {
               return (
