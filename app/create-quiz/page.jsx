@@ -32,7 +32,7 @@ export default function page() {
             return;
           }
           setExcelData(excelData);
-          console.log(excelData);
+          inputFileRef.current.value = "";
         };
       } else {
         toast.error("Please select a valid excel file");
@@ -66,7 +66,7 @@ export default function page() {
       const excelKeys = Object.keys(excelData[0]);
 
       if (requiredKeys[i] !== excelKeys[i]) {
-        toast.error(`${requiredKeys[i]} column not found.`);
+        toast.error(`${requiredKeys[i]} column not found`);
         return false;
       }
     }
@@ -82,8 +82,45 @@ export default function page() {
     return true;
   };
 
-  const handleFileSubmit = (e) => {
+  const handleFileSubmit = async (e) => {
     e.preventDefault();
+
+    if (!excelData) {
+      toast.error("There is no questions added");
+    }
+
+    // const finalQuestionsFormat = excelData.map((item) => {
+    //   return {
+    //     question: item.QUESTION,
+    //     options: [
+    //       { option: item.OPTION1, is_correct: item.CORRECT === 1 },
+    //       { option: item.OPTION2, is_correct: item.CORRECT === 2 },
+    //       { option: item.OPTION3, is_correct: item.CORRECT === 3 },
+    //       { option: item.OPTION4, is_correct: item.CORRECT === 4 },
+    //     ],
+    //   };
+    // });
+
+    // console.log(...finalQuestionsFormat);
+
+    try {
+      const response = await fetch("/api/create-quiz", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      if (response.status === 200) {
+        toast.success("Quiz created successfully");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Server error");
+    }
   };
 
   return (
@@ -101,13 +138,6 @@ export default function page() {
               onChange={handleFile}
               ref={inputFileRef}
             />
-            <button
-              type="submit"
-              className="btn btn-primary"
-              onClick={handleFileSubmit}
-            >
-              Submit
-            </button>
           </form>
         </div>
 
@@ -128,6 +158,17 @@ export default function page() {
                 </div>
               );
             })}
+
+          <p>Final Submission</p>
+          {excelData && (
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={handleFileSubmit}
+            >
+              Submit
+            </button>
+          )}
         </div>
       </div>
     </>

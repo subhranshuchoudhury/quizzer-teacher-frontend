@@ -27,10 +27,12 @@ export default function Login(props) {
         }),
       });
       if (res.status === 200) {
-        router.replace("/home");
         toast.success("Login Success");
+        router.replace("/home");
+      } else if (res.status === 500) {
+        toast.error("Server error, retry later");
       } else {
-        toast.error("Invalid Credentials");
+        toast.error("Invalid credentials");
       }
     } catch (error) {
       toast.error("Something Went Wrong");
