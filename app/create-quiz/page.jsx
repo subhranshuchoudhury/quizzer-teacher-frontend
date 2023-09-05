@@ -237,7 +237,7 @@ export default function page() {
         </div>
       </div>
 
-      <div className="w-full h-[70vh] overflow-x-hidden overflow-y-auto space-y-2 flex items-center justify-center flex-col">
+      <div className="w-full h-[70vh] overflow-x-hidden overflow-y-auto space-y-2">
         {excelData?.length > 0 ? (
           excelData.map((item, index) => {
             return (
@@ -284,12 +284,14 @@ export default function page() {
             );
           })
         ) : (
-          <Image
-            src={"/images/folder.png"}
-            width={100}
-            height={100}
-            className=""
-          />
+          <div className="w-full flex items-center justify-center h-full">
+            <Image
+              src={"/images/folder.png"}
+              width={100}
+              height={100}
+              className=""
+            />
+          </div>
         )}
       </div>
       <div className="mx-auto md:w-[80%] flex items-center justify-center h-[10vh]">
