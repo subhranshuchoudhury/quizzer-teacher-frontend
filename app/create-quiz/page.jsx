@@ -168,7 +168,7 @@ export default function page() {
             </form>
             <div className="text-lg flex items-center justify-center">
               <input
-                inputmode="numeric"
+                inputMode="numeric"
                 name="marksPerQuestion"
                 value={formData?.marksPerQuestion || ""}
                 onChange={handleFormChange}
@@ -290,6 +290,7 @@ export default function page() {
               width={100}
               height={100}
               className=""
+              alt="empty folder"
             />
           </div>
         )}
