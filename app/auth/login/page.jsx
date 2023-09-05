@@ -69,7 +69,7 @@ export default function Login(props) {
     <div className="w-full h-screen flex items-center justify-center relative">
       <div className="fixed top-0 left-0 p-10">
         <Link href={"/"}>
-          <button className="flex items-center space-x-2 text-base-200">
+          <button className="flex items-center space-x-2 text-base text-white">
             <BiArrowBack />
             <span>Home</span>
           </button>
@@ -117,7 +117,7 @@ export default function Login(props) {
               autoComplete="new-password"
               required
               type="password"
-              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-base-200"
+              className="w-full peer bg-transparent focus:shadow-md border border-[#152d41] px-4 py-3 rounded-md outline-none text-base text-white"
               name="from_name"
             />
             <label

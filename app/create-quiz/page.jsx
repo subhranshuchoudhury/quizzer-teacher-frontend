@@ -6,6 +6,7 @@ import * as XLSX from "xlsx";
 import Select from "react-select";
 import sections from "@/constants/sections";
 import batches from "@/constants/batches";
+import Image from "next/image";
 
 export default function page() {
   const [excelData, setExcelData] = useState(null);
@@ -141,47 +142,48 @@ export default function page() {
   };
 
   return (
-    <>
-      <div className="bg-white">
-        <div>
-          <p>UPLOAD FILE SECTION</p>
-          <form action="">
-            <label htmlFor="">Upload excel file</label>
+    <div className="w-full h-screen overflow-hidden">
+      <div className="w-full h-[20vh] p-5 ">
+        <div className="mx-auto md:w-[80%]">
+          <div className="w-full flex items-center justify-center">
             <input
-              type="file"
-              name="excelUploadInput"
-              id="excelInput_1"
-              required
-              onChange={handleFile}
-              ref={inputFileRef}
+              placeholder="Enter Quiz Name"
+              name="name"
+              onChange={handleFormChange}
+              type="text"
+              value={formData.name || ""}
+              className=" bg-transparent text-center font-[600] text-2xl outline-none focus:border-b border-[#3a3a3a] text-white"
             />
-          </form>
-        </div>
-
-        <div>
-          <p>VIEW FILE SECTION</p>
-          {excelData && (
-            <div className="bg-red-500 p-5">
-              <label htmlFor="">QUIZ NAME: </label>
+          </div>
+          <div className="w-full flex items-center justify-between">
+            <form className=" flex items-center">
               <input
-                placeholder="Quiz Name"
-                name="name"
-                onChange={handleFormChange}
-                type="text"
-                value={formData.name || ""}
+                type="file"
+                name="excelUploadInput"
+                id="excelInput_1"
+                required
+                onChange={handleFile}
+                ref={inputFileRef}
               />
-
-              <label htmlFor="">Marks per Question</label>
-
+            </form>
+            <div className="text-lg flex items-center justify-center">
               <input
-                type="number"
+                inputmode="numeric"
                 name="marksPerQuestion"
-                placeholder="Marks per Question"
                 value={formData?.marksPerQuestion || ""}
                 onChange={handleFormChange}
                 onWheel={(e) => e.target.blur()}
+                className="bg-transparent inline-block text-center outline-none w-[30px] text-white focus:border-b border-[#3a3a3a]"
               />
-
+              <span className="text-white capitalize">
+                {formData?.marksPerQuestion === 1 ? "mark" : "marks"} per
+                question
+              </span>
+            </div>
+          </div>
+          {/* {!!!excelData && ( */}
+          <div className="my-2 flex space-x-3  items-center justify-between">
+            <div className="w-1/2">
               <label htmlFor="">Allow Sections</label>
               <Select
                 defaultValue={[sections[0]]}
@@ -216,7 +218,9 @@ export default function page() {
                   });
                 }}
               />
+            </div>
 
+            <div className="w-1/2">
               <label htmlFor="">Select Batch</label>
               <Select
                 className="basic-single"
@@ -228,35 +232,77 @@ export default function page() {
                 }}
               />
             </div>
-          )}
-          {excelData &&
-            excelData.map((item, index) => {
-              return (
-                <div className="bg-green-500 p-5 space-y-4 m-5" key={index}>
-                  <p>
-                    Question {index + 1}. {item.QUESTION}
-                  </p>
-                  <p>A: {item.OPTION1}</p>
-                  <p>B: {item.OPTION2}</p>
-                  <p>C: {item.OPTION3}</p>
-                  <p>D: {item.OPTION4}</p>
-                  <p>ANS: {String.fromCharCode(parseInt(item.CORRECT) + 64)}</p>
-                </div>
-              );
-            })}
-
-          <p>Final Submission</p>
-          {excelData && (
-            <button
-              type="submit"
-              className="btn btn-primary"
-              onClick={handleFileSubmit}
-            >
-              Submit
-            </button>
-          )}
+          </div>
+          {/* )} */}
         </div>
       </div>
-    </>
+
+      <div className="w-full h-[70vh] overflow-x-hidden overflow-y-auto space-y-2 flex items-center justify-center flex-col">
+        {excelData?.length > 0 ? (
+          excelData.map((item, index) => {
+            return (
+              <div
+                className="shadow-md mx-auto shadow-[#000000] bg-[#0c1a26] w-[80%] rounded-xl p-5 space-y-4 text-white font-[600]"
+                key={index}
+              >
+                <p>
+                  Question {index + 1}. {item.QUESTION}
+                </p>
+                <p
+                  className={
+                    String.fromCharCode(parseInt(item.CORRECT) + 64) === "A" &&
+                    "text-green-500"
+                  }
+                >
+                  A: {item.OPTION1}
+                </p>
+                <p
+                  className={
+                    String.fromCharCode(parseInt(item.CORRECT) + 64) === "B" &&
+                    "text-green-500"
+                  }
+                >
+                  B: {item.OPTION2}
+                </p>
+                <p
+                  className={
+                    String.fromCharCode(parseInt(item.CORRECT) + 64) === "C" &&
+                    "text-green-500"
+                  }
+                >
+                  C: {item.OPTION3}
+                </p>
+                <p
+                  className={
+                    String.fromCharCode(parseInt(item.CORRECT) + 64) === "D" &&
+                    "text-green-500"
+                  }
+                >
+                  D: {item.OPTION4}
+                </p>
+              </div>
+            );
+          })
+        ) : (
+          <Image
+            src={"/images/folder.png"}
+            width={100}
+            height={100}
+            className=""
+          />
+        )}
+      </div>
+      <div className="mx-auto md:w-[80%] flex items-center justify-center h-[10vh]">
+        {/* {excelData && ( */}
+        <button
+          type="submit"
+          className="bg-[#115791] w-full p-3 rounded-md hover:text-white hover:bg-[#39a6ff] transition-all ease-linear duration-300"
+          onClick={handleFileSubmit}
+        >
+          Submit
+        </button>
+        {/* )} */}
+      </div>
+    </div>
   );
 }
